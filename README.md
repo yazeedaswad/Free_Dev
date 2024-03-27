@@ -3,7 +3,9 @@
     run these commands in the terminal:
     py -3 -m venv .venv
     .venv\Scripts\activate
+    $ pip install Flask
     flask --app app run
+    
     flask documentation:
     https://flask.palletsprojects.com/en/3.0.x/installation/
 # FreeDev
