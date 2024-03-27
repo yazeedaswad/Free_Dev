@@ -3,7 +3,7 @@
     run these commands in the terminal:
     py -3 -m venv .venv
     .venv\Scripts\activate
-    $ pip install Flask
+    $ pip3 install flask flask-sqlalchemy gunicorn
     flask --app app run
     
     flask documentation:
