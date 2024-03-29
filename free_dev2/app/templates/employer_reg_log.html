@@ -1,0 +1,65 @@
+<!-- this is the page for registering and logging in as an employer-->
+
+<html>
+
+<h1>
+
+Hallo employer
+
+</h1>
+
+
+
+{% extends "base.html" %}
+
+{% block title %}Welcome to FreeDev{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    
+{% endblock %}
+
+{% block content %}
+<h2>Welcome to FreeDev</h2>
+<p>Register or Login here</p>
+
+<form name = 'registration-form' action = '/register-employer' method = 'post'>
+    <label>Name</label>
+    <input name="name" type="text" required>
+
+    <label>Email Address</label>
+    <input name="email-address" onfocusout = "checkIfEmployerExists(event)" type="email" required>
+
+    <label>Password</label>
+    <input name="password" type="password" required>
+
+    <input type="submit">
+</form>
+
+
+
+<form name = "login-form" action = '/login-employer' method = 'post'>
+    
+
+    <label>Email Address</label>
+    <input name="email-address" type="email" required>
+
+    <label>Password</label>
+    <input name="password" type="password" required>
+
+    <input type="submit">
+</form>
+
+
+
+
+
+
+<script src="{{ url_for('static', filename='js/validate-users.js') }}"> </script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+{% endblock %}
+
+{% block footer %} hi {%endblock%}
+
+
+</html>

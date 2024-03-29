@@ -1,0 +1,37 @@
+<!-- this is the opening page which extends the base.html file-->
+<!-- here user only chooses its role, either employer or freelancer-->
+
+{% extends "base.html" %}
+
+{% block title %}Welcome to FreeDev{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    
+{% endblock %}
+
+{% block content %}
+<h1>Welcome to FreeDev</h1>
+<p>Choose your identity</p>
+
+
+
+
+<button onclick="redirectToEmployer()">Employer</button>
+
+
+<button onclick="redirectToFreelancer()">Freelancer</button>
+
+<script>
+    function redirectToEmployer() {
+        window.location.href = "/employer-reg-log-page";
+    }
+
+    function redirectToFreelancer() {
+        window.location.href = "/freelancer-reg-log-page";
+    }
+</script>
+
+{% endblock %}
+
+{% block footer %}  {%endblock%}
