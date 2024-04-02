@@ -1,0 +1,45 @@
+<!-- this is the skeleton of the webpages (like an abstract class)-->
+<!-- this file inherits a css file which is used for structuring and prettiness-->
+
+
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head %} 
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <title>{% block title %}{% endblock %}</title>
+    {% endblock %} 
+
+    {%with messages = get_flashed_messages() %}
+
+    {% if messages %}
+       <ul class = "flashes">
+
+        {%  for message in messages %}
+          <li> {{message}}</li>
+
+          {%endfor%}
+
+       </ul>
+
+       {% endif%}
+       {% endwith%}
+
+
+
+</head>
+<body>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    <div id="footer">
+        {% block footer %}
+        
+        CopyRight2024
+        
+        {% endblock %}
+    </div>
+</body>
+</html>
