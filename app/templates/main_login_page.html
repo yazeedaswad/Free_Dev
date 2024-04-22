@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Welcome to FreeDev</title>
+    <link rel="stylesheet" type="text/css" href="static/css/freelancer_reg_log.css">
+</head>
+
+<body>
+
+    <h1>Hallo freelancer</h1>
+
+    {% extends "base.html" %}
+
+    {% block title %}Welcome to FreeDev{% endblock %}
+
+    {% block head %}
+    {{ super() }}
+
+    {% endblock %}
+
+    {% block content %}
+    <h2>Welcome to FreeDev</h2>
+    <p>Login here</p>
+
+  
+
+    <form name="login-form" action='/login-user' method='post'>
+        <label>Email Address</label>
+        <input name="email-address" type="email" placeholder="Enter your email address" required>
+
+        <label>Password</label>
+        <input name="password" type="password" placeholder="Enter your password" required>
+
+        <input type="submit">
+    </form>
+
+    {% endblock %}
+
+    {% block footer %} hi {%endblock%}
+
+    <script src="{{ url_for('static', filename='js/validate-users.js') }}"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+</body>
+
+</html>
