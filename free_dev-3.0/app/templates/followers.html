@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}My Followers{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        body {
+            background-color: #f4f4f4; /* Light grey background */
+            font-family: Arial, sans-serif; /* Ensures font consistency */
+        }
+
+        .profile-button {
+            margin: 20px;
+            background-color: #007bff; /* Bootstrap primary color */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .profile-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .list-group {
+            max-width: 600px; /* Limits the width of the list */
+            margin: auto; /* Centers the list in the page */
+            background-color: white; /* White background for contrast */
+            border-radius: 5px; /* Rounds the corners of the list group */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Adds a subtle shadow for depth */
+            margin-bottom: 20px; /* Adds space below the list */
+        }
+
+        .list-group-item {
+            border: none; /* Removes borders between items */
+            padding: 12px 20px; /* Pads the items */
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa; /* Very light grey background on hover */
+        }
+
+        .text-muted {
+            color: #6c757d; /* Bootstrap's muted text color */
+        }
+
+        h2 {
+            text-align: center; /* Centers the heading */
+            color: #333; /* Dark grey color for text */
+            margin-top: 20px; /* Space above the heading */
+        }
+
+        p {
+            text-align: center; /* Center the text if no followers */
+            color: #666; /* Medium grey color */
+            font-size: 16px; /* Slightly larger font size */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('profile_page') }}" class="btn btn-primary profile-button">Back to Profile</a>
+
+<h2>My Followers</h2>
+
+{% if followers %}
+    <div class="list-group">
+        {% for follower in followers %}
+            <div class="list-group-item">
+                {{ follower.name }} <span class="text-muted">- {{ follower.email }}</span>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>You do not have any followers yet.</p>
+{% endif %}
+
+{% endblock %}

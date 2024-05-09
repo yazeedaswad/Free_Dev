@@ -1,0 +1,310 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="H:\Sophomore\4th_Sem\COMP202\free_dev-2.3\app\static\js\validate-users.js"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-skill').forEach(button => {
+        button.addEventListener('click', function() {
+            const skillId = this.getAttribute('data-skill-id');
+            deleteSkill(skillId);
+        });
+    });
+
+    document.querySelectorAll('.delete-role').forEach(button => {
+        button.addEventListener('click', function() {
+            const roleId = this.getAttribute('data-role-id');
+            deleteRole(roleId);
+        });
+    });
+
+    function deleteSkill(skillId) {
+        axios.post('/delete-skill', { id: skillId })
+            .then(response => {
+                alert('Skill deleted successfully!');
+                location.reload();
+            })
+            .catch(error => {
+                alert('Failed to delete skill');
+                console.error(error);
+            });
+    }
+
+    function deleteRole(roleId) {
+        axios.post('/delete-role', { id: roleId })
+            .then(response => {
+                alert('Role deleted successfully!');
+                location.reload();
+            })
+            .catch(error => {
+                alert('Failed to delete role');
+                console.error(error);
+            });
+    }
+
+    // Your existing function for updateSkillsDropdown here
+});
+
+
+function updateSkillsDropdown() {
+    var skillType = document.getElementById('skill_type').value;
+    var skillInput = document.getElementById('skill_input');
+    skillInput.innerHTML = ''; // Clear existing options
+    
+    // Predefined skills based on type
+    var skills = skillType === 'language' ? 
+        ["Java", "JavaScript", "Python", "C#", "C++", "Ruby"] : 
+        ["Django", "Flask", "Spring", "React", "Vue", "Angular"];
+    
+    // Populate dropdown
+    skills.forEach(function(skill) {
+        var option = document.createElement('option');
+        option.value = skill;
+        option.textContent = skill;
+        skillInput.appendChild(option);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Handling form submission for adding roles
+    const roleForm = document.getElementById('role-form');
+    roleForm.addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent standard form submission
+        const formData = new FormData(roleForm);
+        axios.post('/add-role', formData)
+            .then(response => {
+                alert('Role added successfully!');
+                location.reload();  // Optionally reload or update UI accordingly
+            })
+            .catch(error => {
+                alert('Failed to add role');
+                console.error(error);
+            });
+    });
+
+    const skillForm = document.getElementById('skill-form');
+if (skillForm) {
+    console.log('Skill form found, adding event listener.'); // This should appear in the console
+    skillForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+        console.log('Submitting skill form via AJAX.'); // Check if this gets logged
+        const formData = new FormData(skillForm);
+        axios.post('/add-technical-skill', formData)
+            .then(response => {
+                alert('Skill added successfully!');
+                location.reload();
+            })
+            .catch(error => {
+                alert('Failed to add skill');
+                console.error(error);
+            });
+    });
+} else {
+    console.log('Skill form not found.'); 
+}
+
+
+   
+});
+
+document.getElementById('skill_type').addEventListener('change', updateSkillsDropdown);
+
+
+    </script>
+
+
+
+{% extends "base.html" %}
+
+{% block title %}Welcome to FreeDev{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style> 
+    
+    body {
+    font-family: 'Arial', sans-serif; /* Ensures a clean, modern font is used */
+    background-color: #f4f4f4; /* Light grey background for slight contrast */
+    color: #333; /* Dark grey color for text for better readability */
+    margin: 20px;
+}
+
+h1, h2 {
+    color: #0056b3; /* Adds a shade of blue to heading elements */
+}
+
+/* Styling for buttons */
+button {
+    background-color: #007bff; /* Bootstrap primary blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3; /* A slightly darker blue on hover */
+}
+
+/* Form and Section Styling */
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    margin-bottom: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+/* List Styling */
+ul {
+    list-style-type: none; /* Removes default list styling */
+    padding: 0;
+}
+
+li {
+    background: #fff;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.06);
+}
+
+/* Responsive Design for smaller screens */
+@media (max-width: 768px) {
+    body {
+        margin: 10px;
+    }
+
+    form {
+        padding: 10px;
+    }
+
+    button {
+        width: 100%; /* Makes button full width */
+        padding: 12px;
+    }
+}
+
+.btn {
+    background-color: #007bff; /* Primary blue color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px; /* Rounded corners for a smoother look */
+    cursor: pointer;
+    font-size: 16px; /* Slightly larger text for better readability */
+    font-weight: bold; /* Makes the text bold */
+    text-decoration: none; /* Removes underline from links */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    display: inline-block; /* Aligns buttons correctly in flexbox */
+}
+
+.btn:hover {
+    background-color: #0056b3; /* A darker blue on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover for a "lifting" effect */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Places the Logout button on the right by assigning margin-right */
+.logout-button {
+    margin-right: 20px;  /* Right margin for right alignment */
+}
+
+/* Places the Profile button on the left by assigning margin-left */
+.profile-button {
+    margin-left: 20px;  /* Left margin for left alignment */
+}
+    </style>
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/freelancer_update_profilepage.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="button-container">
+    <a href="{{ url_for('logout_user') }}" class="btn btn-primary logout-button">Logout</a>
+    <a href="{{ url_for('profile_page') }}" class="btn btn-primary profile-button">Back to Profile</a>
+</div>
+
+<h2>Your Technical Skills</h2>
+<ul id="existing_skills_list">
+    {% for skill in user.skills %}
+    <li>{{ skill.name }} ({{ skill.type }}) - Rating: {{ skill.rating }}
+        <button class="delete-skill" data-skill-id="{{ skill.id }}">Delete</button>
+    </li>
+    {% endfor %}
+</ul>
+
+
+<!-- Form to add professional roles with suggestions -->
+<section>
+
+    <h2>Your Professional Roles</h2>
+    <ul id="existing_roles_list">
+        {% for role in user.roles %}
+        <li>{{ role.role_name }} - Years: {{ role.exp_years }}
+            <button class="delete-role" data-role-id="{{ role.id }}">Delete</button>
+        </li>
+        {% endfor %}
+    </ul>
+
+
+
+    <h2>Add Your Professional Role</h2>
+    <form id="role-form" action="{{ url_for('add_role') }}" method="post">
+        <select name="role_name" id="role_input" required>
+            <option value="">Select a Role</option>
+            <option value="Web Developer">Web Developer</option>
+            <option value="Data Scientist">Data Scientist</option>
+            <option value="Project Manager">Project Manager</option>
+            <option value="UI/UX Designer">UI/UX Designer</option>
+        </select>
+        <!-- Dropdown for selecting years of experience -->
+        <select name="exp_years" id="exp_years" required>
+            <option value="0">Less than one year</option>
+            {% for year in range(1, 31) %}
+            <option value="{{ year }}">{{ year }} year{{ 's' if year != 1 else '' }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Add Role</button>
+    </form>
+</section>
+
+<!-- Existing section for technical skills -->
+<section>
+    <h2>Add Your Technical Skills</h2>
+    <form id="skill-form" action="{{ url_for('add_technical_skill') }}" method="post">
+        <select name="skill_type" id="skill_type" required onchange="updateSkillsDropdown()">
+            <option value="">Select Skill Type</option>
+            <option value="language">Programming Language</option>
+            <option value="framework">Framework</option>
+        </select>
+        <select name="name" id="skill_input" required>
+            <option value="">Select a Skill</option>
+        </select>
+        <!-- Dropdown for rating -->
+        <select name="rating" id="rating_input" required>
+            <option value="">Rate the Skill</option>
+            <option value="1">1 - Beginner</option>
+            <option value="2">2 - Novice</option>
+            <option value="3">3 - Competent</option>
+            <option value="4">4 - Proficient</option>
+            <option value="5">5 - Expert</option>
+        </select>
+        <button type="submit">Add Technical Skill</button>
+    </form>
+</section>
+{% endblock %}

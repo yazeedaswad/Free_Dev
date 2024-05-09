@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to FreeDev{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+    
+        .profile-photo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            min-height: 220px;
+        }
+    
+        .profile-photo-container .profile-photo {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+    
+        .profile-sections {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px 0;
+            max-width: 1600px;
+            margin: 20px auto;
+        }
+    
+        .section {
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 10px;
+            padding: 20px;
+            flex-basis: calc(33% - 20px);
+            text-align: center;
+        }
+    
+        @media (max-width: 768px) {
+            .section {
+                flex-basis: calc(50% - 20px);
+            }
+        }
+    
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+    
+        li {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+    
+        #user-name {
+            font-size: 24px;  /* Slightly larger to emphasize the name */
+            margin-bottom: 5px; /* Space between the name and email */
+        }
+    
+        #user-email {
+            color: #666; /* Subtle color for email */
+            font-size: 16px;
+        }
+        
+        .btn-back {
+            margin-top: 10px;
+            padding: 5px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .follow-button {
+        background-color: #007bff; /* Primary blue */
+        color: white; /* White text */
+        border: none; /* No border */
+        padding: 10px 20px; /* Padding for larger click area */
+        border-radius: 5px; /* Rounded corners */
+        font-size: 16px; /* Larger font size */
+        font-weight: bold; /* Bold text */
+        cursor: pointer; /* Cursor indicates clickable */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+    }
+
+    .follow-button:hover, .follow-button:focus {
+        background-color: #0056b3; /* Darker blue on hover/focus */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Larger shadow on hover/focus */
+        outline: none; /* Removes the outline to keep styling clean */
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('job_postings') }}" class="btn-back">Back to Job Postings</a>
+
+
+<h2>Profile Page of {{ user.name }}</h2>
+
+{% if is_following %}
+<form action="{{ url_for('unfollow_freelancer', freelancer_id=user.id) }}" method="post">
+    <button type="submit" class="btn btn-danger follow-button">Unfollow</button>
+</form>
+{% else %}
+<form action="{{ url_for('follow_freelancer', freelancer_id=user.id) }}" method="post">
+    <button type="submit" class="btn btn-primary follow-button">Follow</button>
+</form>
+{% endif %}
+
+
+<div class="profile-sections">
+    <div class="section">
+        <h3>Programming Languages</h3>
+        <ul id="languages_list"></ul>
+    </div>
+    <div class="section">
+        <h3>Frameworks</h3>
+        <ul id="frameworks_list"></ul>
+    </div>
+    <div class="section">
+        <h3>My Roles</h3>
+        <ul id="roles_list"></ul>
+    </div>
+</div>
+
+<div class="profile-photo-container">
+    <img id="user-photo" src="{{ user.profile_photo_url | default(url_for('static', filename='images/default-profile.png')) }}" alt="{{ user.name }}" class="profile-photo">
+    <h3 id="user-name">{{ user.name }}</h3>
+    <p id="user-email">{{ user.email }}</p> <!-- Displaying user email -->
+    
+    
+
+    
+</div>
+
+<script src="{{ url_for('static', filename='js/validate-users.js') }}"></script>
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var userEmail = "{{ user.email }}";
+    fetch(`/profile-data?email=${userEmail}`).then(response => response.json()).then(data => {
+        const languagesList = document.getElementById('languages_list');
+        const frameworksList = document.getElementById('frameworks_list');
+        const rolesList = document.getElementById('roles_list');
+
+        data.skills.forEach(skill => {
+            const skillItem = document.createElement('li');
+            skillItem.textContent = `${skill.name} (Rating: ${skill.rating})`;
+            if (skill.type === 'language') {
+                languagesList.appendChild(skillItem);
+            } else if (skill.type === 'framework') {
+                frameworksList.appendChild(skillItem);
+            }
+        });
+
+        data.roles.forEach(role => {
+            const roleItem = document.createElement('li');
+            roleItem.textContent = `${role.role_name} (Experience: ${role.exp_years} years)`;
+            rolesList.appendChild(roleItem);
+        });
+    }).catch(error => console.error('Error loading profile data:', error));
+});
+
+
+</script>
+
+
+
+{% endblock %}
+
+
