@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Employer Profile{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <!-- Add any additional head content here -->
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome, {{ user.name }}</h1>
+
+    <div class="my-3">
+        <a href="{{ url_for('create_job_posting') }}" class="btn btn-success">Create New Job Posting</a>
+        <a href="{{ url_for('logout_user') }}" class="btn btn-danger">Logout</a>
+    </div>
+
+    <!-- Section to display employer's job postings -->
+    <section>
+        <h2>Your Job Postings</h2>
+        {% if job_postings %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Project Type</th>
+                        <th>Skills Required</th>
+                        <th>Deadline</th>
+                        <th>Salary Range</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in job_postings %}
+                    <tr>
+                        <td>{{ job.title }}</td>
+                        <td>{{ job.project_type }}</td>
+                        <td>{{ job.skills_required }}</td>
+                        <td>{{ job.deadline }}</td>
+                        <td>{{ job.salary_min }} - {{ job.salary_max }}</td>
+                        <td>{{ job.description }}</td>
+                        <td>
+                            <!-- Actions like edit or delete can go here -->
+                            <button type="button" class="btn btn-danger" onclick="deleteJobPosting('{{ job.id }}')">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No job postings to display.</p>
+        {% endif %}
+    </section>
+</div>
+
+<!-- Optional: JavaScript for delete action -->
+<script>
+    function deleteJobPosting(jobId) {
+        if(confirm('Are you sure you want to delete this job posting?')) {
+            // Perform the deletion request...
+        }
+    }
+</script>
+
+{% endblock %}
+
+{% block footer %}
+    {{ super() }}
+    <!-- Add any footer content here -->
+{% endblock %}

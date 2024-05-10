@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  .search-results-container {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 20px;
+  }
+
+  .search-title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .result-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+
+  .result-item h3 {
+    margin: 0;
+    color: #0056b3;
+    cursor: pointer;
+  }
+
+  .result-item p {
+    margin: 5px 0;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="search-results-container">
+  <h1 class="search-title">Search Results For "{{ query }}"</h1>
+
+  <h2>Users</h2>
+  {% if users %}
+  {% for user in users %}
+    <div class="result-item">
+      <h3><a href="{{ url_for('public_profile', email=user.email) }}">{{ user.name }}</a></h3>
+      <p>{{ user.email }}</p>
+      <p>Role: {{ user.role }}</p>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>No user results found.</p>
+{% endif %}
+
+
+  <h2>Job Postings</h2>
+  {% if job_postings %}
+    {% for job in job_postings %}
+      <div class="result-item">
+        <h3>{{ job.title }}</h3>
+        <p>Type: {{ job.project_type }}</p>
+        <p>Skills: {{ job.skills_required }}</p>
+        <p>Deadline: {{ job.deadline.strftime('%Y-%m-%d') }}</p>
+        <p>Salary Range: {{ job.salary_min }} - {{ job.salary_max }}</p>
+        <p>{{ job.description }}</p>
+        <!-- Other job details -->
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No job postings found.</p>
+  {% endif %}
+</div>
+{% endblock %}
