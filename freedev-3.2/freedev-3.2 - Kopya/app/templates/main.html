@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to FreeDev{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="static/css/main.css">
+    <style>
+        .selected { background-color: #699f97; }
+    </style>
+{% endblock %}
+
+{% block content %}
+<h1>FreeDev</h1>
+<p1>FreeDev <b>unites</b> skill with opportunity;<br>Find the <b>perfect match</b> for your software needs</p1>
+<form action="{{ url_for('search') }}" method="get">
+    <input class="button-searchbar"type="text" id="search-box" name="query" placeholder="Search..." autocomplete="off">
+    <button class="button-search"type="submit">Search</button>
+</form>
+
+<div class="button-container">
+    <button class="button-container-signup" id="employer-btn" onclick="toggleRegistrationForm('employer')">Sign Up</button>
+    <button class="button-container-dev" id="freelancer-btn" onclick="toggleRegistrationForm('freelancer')">Become a Developer</button>
+    <button class="button-container-login" id="freelancer-btn" onclick="redirectToLogin()">Login</button>
+</div>
+<div id="employer-registration" class="registration-form" style="display: none;">
+    <form class="signupform"name='employer-registration-form' action='/register-user' method='post' onsubmit="validateRegistration(event)">
+        <label class="label-name">Name: </label>
+        <input class="inputbars"name="name" type="text" placeholder="Enter your name" required>
+        <label class="label-email">Email: </label>
+        <input class="inputbars"name="email-address" type="email" placeholder="Enter your email address" required>
+        <label class="label-password">Password: </label>
+        <input class="inputbars"name="password" type="password" placeholder="Enter your password" required>
+        <input type="hidden" name="role" value="employer">
+        <input class="button-submit"type="submit">
+    </form>
+</div>
+<div id="freelancer-registration" class="registration-form" style="display: none;">
+    <form class="signupform"name='freelancer-registration-form' action='/register-user' method='post' onsubmit="validateRegistration(event)">
+        <label class="label-name">Name: </label>
+        <input class="inputbars" name="name" type="text" placeholder="Enter your name" required>
+        <label class="label-email">Email: </label>
+        <input class="inputbars"name="email-address" type="email" placeholder="Enter your email address" required>
+        <label class="label-password">Password: </label>
+        <input class="inputbars"name="password" type="password" placeholder="Enter your password" required>
+        <input type="hidden" name="role" value="freelancer">
+        <input class="button-submit" type="submit">
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+<script>
+    function validateRegistration(event) {
+        event.preventDefault();
+        var form = event.target;
+        var email = form.elements['email-address'].value;
+        axios.post('/validate-registration', { email: email })
+            .then((response) => {
+                if (response.data.user_exists) {
+                    alert('User with provided email already exists. Please use a different email address.');
+                } else {
+                    form.submit();
+                }
+            })
+            .catch((error) => {
+                console.error('Error validating registration:', error);
+            });
+    }
+    function toggleRegistrationForm(role) {
+        var employerBtn = document.getElementById('employer-btn');
+        var freelancerBtn = document.getElementById('freelancer-btn');
+        var employerForm = document.getElementById('employer-registration');
+        var freelancerForm = document.getElementById('freelancer-registration');
+        if (role === 'employer') {
+            employerBtn.classList.add('selected');
+            freelancerBtn.classList.remove('selected');
+            employerForm.style.display = 'block';
+            freelancerForm.style.display = 'none';
+        } else if (role === 'freelancer') {
+            freelancerBtn.classList.add('selected');
+            employerBtn.classList.remove('selected');
+            freelancerForm.style.display = 'block';
+            employerForm.style.display = 'none';
+        }
+    }
+    function redirectToLogin() {
+        window.location.href = "/main-login-page";
+    }
+</script>
+{% endblock %}

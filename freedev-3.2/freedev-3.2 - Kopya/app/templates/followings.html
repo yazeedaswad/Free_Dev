@@ -1,0 +1,81 @@
+
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<style>
+    body {
+        background-color: #f8f9fa; /* Soft background color */
+        font-family: 'Arial', sans-serif; /* Ensures font consistency */
+    }
+
+    .btn-back {
+        margin: 20px;
+        padding: 10px 15px;
+        background-color: #007bff; /* Bootstrap primary blue */
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+    }
+
+    .btn-back:hover {
+        background-color: #0056b3; /* A darker shade for hover effect */
+        color: white;
+        text-decoration: none; /* Ensures the text decoration doesn't change on hover */
+    }
+
+    h2 {
+        text-align: center; /* Centers the heading */
+        color: #333; /* Dark grey color for text */
+        padding-top: 20px; /* Adds space above the heading */
+    }
+
+    .list-group {
+        width: 80%; /* Restricts the maximum width of the list */
+        margin: auto; /* Centers the list in the page */
+        background-color: white; /* Ensures background contrast for readability */
+        border-radius: 5px; /* Rounds corners for aesthetic appeal */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    }
+
+    .list-group-item {
+        border: none; /* Removes the default border */
+        padding: 12px 20px; /* Generous padding for touch targets */
+        border-bottom: 1px solid #ccc; /* Subtle separator */
+    }
+
+    .list-group-item:last-child {
+        border-bottom: none; /* Removes border from the last item */
+    }
+
+    .list-group-item a {
+        color: #007bff; /* Sets the color of links to bootstrap blue */
+        text-decoration: none; /* No underline */
+    }
+
+    .list-group-item a:hover {
+        color: #0056b3; /* Darker blue on hover */
+    }
+
+    p {
+        text-align: center; /* Centers the paragraph for a clean look */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('job_postings') }}" class="btn-back">Back to Job Postings</a>
+<h2>Profiles I Follow</h2>
+{% if followed_users %}
+    <ul class="list-group">
+        {% for user in followed_users %}
+        <li class="list-group-item">
+            <a href="{{ url_for('public_profile', email=user.email) }}">{{ user.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You are not following anyone yet.</p>
+{% endif %}
+{% endblock %}

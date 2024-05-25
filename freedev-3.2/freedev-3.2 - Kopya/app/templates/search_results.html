@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  .search-results-container {
+    margin-top: 20px;
+  }
+
+  .search-title {
+    font-size: 24px;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+
+  .result-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+
+  .result-item h3 {
+    margin: 0;
+    color: #0056b3;
+    cursor: pointer;
+  }
+
+  .result-item p {
+    margin: 5px 0;
+  }
+
+  .filter-panel {
+    display: none; /* Initially hidden, shown on button click */
+    background: #f8f9fa;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+  }
+
+  .filter-group {
+    margin-bottom: 20px;
+  }
+</style>
+<script>
+  function toggleFilterPanel() {
+    var panel = document.getElementById('filter-panel');
+    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+  }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="search-title">Search Results For "{{ query }}"</h1>
+  <button class="btn btn-primary" onclick="toggleFilterPanel()">Filter Results</button>
+  <div id="filter-panel" class="filter-panel">
+    <form action="{{ url_for('advanced_search') }}" method="get" class="row g-3">
+      <div class="col-md-4">
+        <h3>Languages</h3>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Java" id="java">
+          <label class="form-check-label" for="java">Java</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="JavaScript" id="javascript">
+          <label class="form-check-label" for="javascript">JavaScript</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Python" id="python">
+          <label class="form-check-label" for="python">Python</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="C#" id="csharp">
+          <label class="form-check-label" for="csharp">C#</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="C++" id="cplusplus">
+          <label class="form-check-label" for="cplusplus">C++</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Ruby" id="ruby">
+          <label class="form-check-label" for="ruby">Ruby</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="PHP" id="php">
+          <label class="form-check-label" for="php">PHP</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Swift" id="swift">
+          <label class="form-check-label" for="swift">Swift</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Kotlin" id="kotlin">
+          <label class="form-check-label" for="kotlin">Kotlin</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Go" id="go">
+          <label class="form-check-label" for="go">Go</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Rust" id="rust">
+          <label class="form-check-label" for="rust">Rust</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="TypeScript" id="typescript">
+          <label class="form-check-label" for="typescript">TypeScript</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Shell" id="shell">
+          <label class="form-check-label" for="shell">Shell</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="R" id="r">
+          <label class="form-check-label" for="r">R</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Scala" id="scala">
+          <label class="form-check-label" for="scala">Scala</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Perl" id="perl">
+          <label class="form-check-label" for="perl">Perl</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <h3>Frameworks</h3>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Django" id="django">
+          <label class="form-check-label" for="django">Django</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Flask" id="flask">
+          <label class="form-check-label" for="flask">Flask</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Spring" id="spring">
+          <label class="form-check-label" for="spring">Spring</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="React" id="react">
+          <label class="form-check-label" for="react">React</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Vue" id="vue">
+          <label class="form-check-label" for="vue">Vue</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Angular" id="angular">
+          <label class="form-check-label" for="angular">Angular</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Express.js" id="expressjs">
+          <label class="form-check-label" for="expressjs">Express.js</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Ruby on Rails" id="rubyonrails">
+          <label class="form-check-label" for="rubyonrails">Ruby on Rails</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Laravel" id="laravel">
+          <label class="form-check-label" for="laravel">Laravel</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="ASP.NET" id="aspnet">
+          <label class="form-check-label" for="aspnet">ASP.NET</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Meteor.js" id="meteorjs">
+          <label class="form-check-label" for="meteorjs">Meteor.js</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Ember.js" id="emberjs">
+          <label class="form-check-label" for="emberjs">Ember.js</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Backbone.js" id="backbonejs">
+          <label class="form-check-label" for="backbonejs">Backbone.js</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Knockout.js" id="knockoutjs">
+          <label class="form-check-label" for="knockoutjs">Knockout.js</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <h3>Specialties</h3>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Web Developer" id="webDeveloper">
+          <label class="form-check-label" for="webDeveloper">Web Developer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Data Scientist" id="dataScientist">
+          <label class="form-check-label" for="dataScientist">Data Scientist</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Project Manager" id="projectManager">
+          <label class="form-check-label" for="projectManager">Project Manager</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Machine Learning Engineer" id="machineLearningEngineer">
+          <label class="form-check-label" for="machineLearningEngineer">Machine Learning Engineer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Cybersecurity Specialist" id="cybersecuritySpecialist">
+          <label class="form-check-label" for="cybersecuritySpecialist">Cybersecurity Specialist</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Network Engineer" id="networkEngineer">
+          <label class="form-check-label" for="networkEngineer">Network Engineer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Blockchain Developer" id="blockchainDeveloper">
+          <label class="form-check-label" for="blockchainDeveloper">Blockchain Developer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Cloud Solutions Architect" id="cloudSolutionsArchitect">
+          <label class="form-check-label" for="cloudSolutionsArchitect">Cloud Solutions Architect</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Embedded Systems Engineer" id="embeddedSystemsEngineer">
+          <label class="form-check-label" for="embeddedSystemsEngineer">Embedded Systems Engineer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="UI/UX Designer" id="uiUxDesigner">
+          <label class="form-check-label" for="uiUxDesigner">UI/UX Designer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="App Developer" id="appDeveloper">
+          <label class="form-check-label" for="appDeveloper">App Developer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Systems Analyst" id="systemsAnalyst">
+          <label class="form-check-label" for="systemsAnalyst">Systems Analyst</label>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+</div>
+
+  <div class="search-results-container">
+    <h2>Users</h2>
+    {% if users %}
+    {% for user in users %}
+    <div class="result-item">
+      <h3><a href="{{ url_for('public_profile', email=user.email) }}">{{ user.name }}</a></h3>
+      <p>{{ user.email }}</p>
+      <p>Role: {{ user.role }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No user results found.</p>
+    {% endif %}
+
+    <h2>Job Postings</h2>
+    {% if job_postings %}
+    {% for job in job_postings %}
+    <div class="result-item">
+      <h3>{{ job.title }}</h3>
+      <p>Type: {{ job.project_type }}</p>
+      <p>Skills: {{ job.skills_required }}</p>
+      <p>Deadline: {{ job.deadline.strftime('%Y-%m-%d') }}</p>
+      <p>Salary Range: {{ job.salary_min }} - {{ job.salary_max }}</p>
+      <p>{{ job.description }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No job postings found.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
