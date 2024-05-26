@@ -1,0 +1,400 @@
+
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+
+
+.search-results-container h2 {
+    padding-top: 20px; /* Adjust the padding as needed */
+}
+
+  .result-item {
+    padding: 15px; /* Adjust the padding as needed */
+}
+  
+        body {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-family: American Typewriter, serif;
+            background-color: #FFFAFA;
+        }
+    
+        .profile-photo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            min-height: 220px;
+        }
+    
+        .profile-photo {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 3px solid #dee2e6;
+        }
+    
+        .profile-sections {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px 0;
+            max-width: 1600px;
+            margin: 20px auto;
+        }
+    
+        .section {
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 10px;
+            padding: 20px;
+            flex-basis: calc(33% - 20px);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                flex-basis: calc(50% - 20px);
+            }
+        }
+    
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+    
+        li {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+    
+        #user-name {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+    
+        .btn-primary {
+            background-color: #7FBFB6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .notifications-section {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .notifications-section ul {
+            padding-left: 0;
+        }
+
+        .notifications-section li {
+            list-style-type: none;
+            margin-bottom: 5px;
+        }
+
+        .alert {
+            font-size: 0.9rem;
+        }
+
+        .job-postings-section {
+            margin: 20px 0;
+            width: 100%;
+            max-width: 800px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .job-posting {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-label {
+            cursor: pointer;
+            border-radius: 50%;
+            display: inline-block;
+            overflow: hidden;
+        }
+  
+</style>
+<script>
+  function toggleFilterPanel() {
+    var panel = document.getElementById('filter-panel');
+    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+  }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="search-title">Search Results For "{{ query }}"</h1>
+  <button class="btn btn-primary" onclick="toggleFilterPanel()">Filter Results</button>
+  <div id="filter-panel" class="filter-panel">
+    <form action="{{ url_for('advanced_search') }}" method="get" class="row g-3">
+      <div class="col-md-4">
+        <h3>Languages</h3>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Java" id="java">
+          <label class="form-check-label" for="java">Java</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="JavaScript" id="javascript">
+          <label class="form-check-label" for="javascript">JavaScript</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Python" id="python">
+          <label class="form-check-label" for="python">Python</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="C#" id="csharp">
+          <label class="form-check-label" for="csharp">C#</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="C++" id="cplusplus">
+          <label class="form-check-label" for="cplusplus">C++</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Ruby" id="ruby">
+          <label class="form-check-label" for="ruby">Ruby</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="PHP" id="php">
+          <label class="form-check-label" for="php">PHP</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Swift" id="swift">
+          <label class="form-check-label" for="swift">Swift</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Kotlin" id="kotlin">
+          <label class="form-check-label" for="kotlin">Kotlin</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Go" id="go">
+          <label class="form-check-label" for="go">Go</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Rust" id="rust">
+          <label class="form-check-label" for="rust">Rust</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="TypeScript" id="typescript">
+          <label class="form-check-label" for="typescript">TypeScript</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Shell" id="shell">
+          <label class="form-check-label" for="shell">Shell</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="R" id="r">
+          <label class="form-check-label" for="r">R</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Scala" id="scala">
+          <label class="form-check-label" for="scala">Scala</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="language" value="Perl" id="perl">
+          <label class="form-check-label" for="perl">Perl</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <h3>Frameworks</h3>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Django" id="django">
+          <label class="form-check-label" for="django">Django</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Flask" id="flask">
+          <label class="form-check-label" for="flask">Flask</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Spring" id="spring">
+          <label class="form-check-label" for="spring">Spring</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="React" id="react">
+          <label class="form-check-label" for="react">React</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Vue" id="vue">
+          <label class="form-check-label" for="vue">Vue</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Angular" id="angular">
+          <label class="form-check-label" for="angular">Angular</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Express.js" id="expressjs">
+          <label class="form-check-label" for="expressjs">Express.js</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Ruby on Rails" id="rubyonrails">
+          <label class="form-check-label" for="rubyonrails">Ruby on Rails</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Laravel" id="laravel">
+          <label class="form-check-label" for="laravel">Laravel</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="ASP.NET" id="aspnet">
+          <label class="form-check-label" for="aspnet">ASP.NET</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Meteor.js" id="meteorjs">
+          <label class="form-check-label" for="meteorjs">Meteor.js</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Ember.js" id="emberjs">
+          <label class="form-check-label" for="emberjs">Ember.js</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Backbone.js" id="backbonejs">
+          <label class="form-check-label" for="backbonejs">Backbone.js</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="framework" value="Knockout.js" id="knockoutjs">
+          <label class="form-check-label" for="knockoutjs">Knockout.js</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <h3>Specialties</h3>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Web Developer" id="webDeveloper">
+          <label class="form-check-label" for="webDeveloper">Web Developer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Data Scientist" id="dataScientist">
+          <label class="form-check-label" for="dataScientist">Data Scientist</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Project Manager" id="projectManager">
+          <label class="form-check-label" for="projectManager">Project Manager</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Machine Learning Engineer" id="machineLearningEngineer">
+          <label class="form-check-label" for="machineLearningEngineer">Machine Learning Engineer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Cybersecurity Specialist" id="cybersecuritySpecialist">
+          <label class="form-check-label" for="cybersecuritySpecialist">Cybersecurity Specialist</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Network Engineer" id="networkEngineer">
+          <label class="form-check-label" for="networkEngineer">Network Engineer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Blockchain Developer" id="blockchainDeveloper">
+          <label class="form-check-label" for="blockchainDeveloper">Blockchain Developer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Cloud Solutions Architect" id="cloudSolutionsArchitect">
+          <label class="form-check-label" for="cloudSolutionsArchitect">Cloud Solutions Architect</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Embedded Systems Engineer" id="embeddedSystemsEngineer">
+          <label class="form-check-label" for="embeddedSystemsEngineer">Embedded Systems Engineer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="UI/UX Designer" id="uiUxDesigner">
+          <label class="form-check-label" for="uiUxDesigner">UI/UX Designer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="App Developer" id="appDeveloper">
+          <label class="form-check-label" for="appDeveloper">App Developer</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="specialty" value="Systems Analyst" id="systemsAnalyst">
+          <label class="form-check-label" for="systemsAnalyst">Systems Analyst</label>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+</div>
+
+  <div class="search-results-container">
+    <h2>Users</h2>
+    {% if users %}
+
+    {% for user in users %}
+
+    <div class="result-item">
+
+      <h3>
+        
+        {% if user.role != 'employer' %}
+
+        <a href="{{ url_for('public_profile', email=user.email) }}">{{ user.name }}</a>
+
+        {% else %}
+
+
+        {{ user.name }}
+            {% endif %}
+
+      </h3>
+      <p>{{ user.email }}</p>
+      <p>Role: {{ user.role }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No user results found.</p>
+    {% endif %}
+</div>
+
+    <h2>Job Postings</h2>
+    {% if job_postings %}
+    {% for job in job_postings %}
+    <div class="result-item">
+      <h3>{{ job.title }}</h3>
+      <p>Type: {{ job.project_type }}</p>
+      <p>Skills: {{ job.skills_required }}</p>
+      <p>Deadline: {{ job.deadline.strftime('%Y-%m-%d') }}</p>
+      <p>Salary Range: {{ job.salary_min }} - {{ job.salary_max }}</p>
+      <p>{{ job.description }}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No job postings found.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

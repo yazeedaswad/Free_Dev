@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to FreeDev{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        body {
+            font-family: American Typewriter, serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFFAFA;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            background-color: #FFFAFA;
+        }
+        
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .profile-photo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            min-height: 220px;
+        }
+
+        .profile-photo-container .profile-photo {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .profile-sections {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px 0;
+            max-width: 1600px;
+            margin: 20px auto;
+        }
+
+        .section {
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 10px;
+            padding: 20px;
+            flex-basis: calc(33% - 20px);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                flex-basis: calc(50% - 20px);
+            }
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+
+        li {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        #user-name {
+            font-size: 24px;  /* Slightly larger to emphasize the name */
+            margin-bottom: 5px; /* Space between the name and email */
+        }
+
+        #user-email {
+            color: #666; /* Subtle color for email */
+            font-size: 16px;
+        }
+        
+        .btn-back {
+            margin-top: 10px;
+            padding: 5px 15px;
+            background-color: #7FBFB6;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .follow-button {
+            background-color: #7FBFB6; /* Primary color */
+            color: white; /* White text */
+            border: none; /* No border */
+            padding: 10px 20px; /* Padding for larger click area */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 16px; /* Larger font size */
+            font-weight: bold; /* Bold text */
+            cursor: pointer; /* Cursor indicates clickable */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+            transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+        }
+
+        .follow-button:hover, .follow-button:focus {
+            background-color: #0056b3; /* Darker color on hover/focus */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Larger shadow on hover/focus */
+            outline: none; /* Removes the outline to keep styling clean */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: #7FBFB6;
+            font-size: 50px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if show_follow_options %}
+    <a href="{{ url_for('job_postings') }}" class="btn btn-primary profile-button btn-back">Back to Job Postings</a>
+    {% endif %}
+
+    <h2>Profile Page of {{ user.name }}</h2>
+
+    {% if not show_follow_options %}
+    <div class="button-container">
+        <a href="{{ url_for('profile_page') }}" class="btn btn-primary profile-button btn-back">Back to Profile</a>
+    </div>
+    {% endif %}
+
+    {% if show_follow_options %}
+    {% if is_following %}
+    <form action="{{ url_for('unfollow_freelancer', freelancer_id=user.id) }}" method="post">
+        <button type="submit" class="btn btn-danger follow-button">Unfollow</button>
+    </form>
+    {% else %}
+    <form action="{{ url_for('follow_freelancer', freelancer_id=user.id) }}" method="post">
+        <button type="submit" class="btn btn-primary follow-button">Follow</button>
+    </form>
+    {% endif %}
+    {% endif %}
+
+    <div class="profile-sections">
+        <div class="section">
+            <h3>Programming Languages</h3>
+            <ul id="languages_list"></ul>
+        </div>
+        <div class="section">
+            <h3>Frameworks</h3>
+            <ul id="frameworks_list"></ul>
+        </div>
+        <div class="section">
+            <h3>Roles</h3>
+            <ul id="roles_list"></ul>
+        </div>
+    </div>
+
+    <div class="profile-photo-container">
+        <img id="user-photo" src="{{ user.profile_photo_url | default(url_for('static', filename='images/default-profile.png')) }}" alt="{{ user.name }}" class="profile-photo">
+        <h3 id="user-name">{{ user.name }}</h3>
+        <p id="user-email">{{ user.email }}</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/validate-users.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    var userEmail = "{{ user.email }}";
+    fetch(`/profile-data?email=${userEmail}`).then(response => response.json()).then(data => {
+        const languagesList = document.getElementById('languages_list');
+        const frameworksList = document.getElementById('frameworks_list');
+        const rolesList = document.getElementById('roles_list');
+
+        data.skills.forEach(skill => {
+            const skillItem = document.createElement('li');
+            const starsContainer = createStars(skill.rating); // Call createStars function
+            skillItem.textContent = skill.name + ' ';
+            skillItem.appendChild(starsContainer); // Append starsContainer to skillItem
+            skillItem.innerHTML += ' ';
+            if (skill.type === 'language') {
+                languagesList.appendChild(skillItem);
+            } else if (skill.type === 'framework') {
+                frameworksList.appendChild(skillItem);
+            }
+        });
+
+        data.roles.forEach(role => {
+            const roleItem = document.createElement('li');
+            roleItem.textContent = `${role.role_name} (Experience: ${role.exp_years} years)`;
+            rolesList.appendChild(roleItem);
+        });
+    }).catch(error => console.error('Error loading profile data:', error));
+
+    function createStars(rating) {
+        const starsContainer = document.createElement('span');
+        for (let i = 0; i < rating; i++) {
+            const starImg = document.createElement('img');
+            starImg.src = "{{ url_for('static', filename='storing_stars/star.png') }}"; // Correct URL for the star image
+            starImg.alt = 'Star';
+            starImg.style.width = '20px'; // Set the size of your star image
+            starsContainer.appendChild(starImg);
+        }
+        return starsContainer;
+    }
+});
+
+    </script>
+</div>
+{% endblock %}

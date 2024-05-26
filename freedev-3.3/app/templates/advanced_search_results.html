@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .results-section {
+            margin-bottom: 40px;
+        }
+        .result-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .filters-used {
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Results For "{{ query }}"</h1>
+    <p class="filters-used">Filtered by "{{ filters | join(', ') }}"</p>
+
+    <div class="results-section">
+        <h2>Users</h2>
+        {% if users %}
+            {% for user in users %}
+            <div class="result-item">
+                <!-- Clickable link to user's profile page -->
+                <strong><a href="{{ url_for('public_profile', email=user.email) }}">{{ user.name }}</a></strong><br>
+                Email: {{ user.email }}<br>
+                Role: {{ user.role }}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No user results found.</p>
+        {% endif %}
+    </div>
+
+    <div class="results-section">
+        <h2>Job Postings</h2>
+        {% if job_postings %}
+            {% for job in job_postings %}
+            <div class="result-item">
+                <strong>{{ job.title }}</strong><br>
+                Type: {{ job.project_type }}<br>
+                Skills: {{ job.skills_required }}<br>
+                Deadline: {{ job.deadline.strftime('%Y-%m-%d') }}<br>
+                Salary Range: {{ job.salary_min }} - {{ job.salary_max }}<br>
+                Description: {{ job.description }}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No job postings found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

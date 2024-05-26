@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include jQuery and jQuery UI for Autocomplete Functionality -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    <div id="footer">
+        {% block footer %}
+        
+        {% endblock %}
+    </div>
+
+    <!-- Autocomplete Script -->
+    <script>
+        $(function() {
+            // Check if the search box exists on the current page
+            var searchBox = $("#search-box");
+            if (searchBox.length) {
+                searchBox.autocomplete({
+                    source: function(request, response) {
+                        // Logging the request term to console for debugging
+                        console.log("Autocomplete search term:", request.term);
+                        $.getJSON('/autocomplete', {
+                            term: request.term
+                        }, function(data) {
+                            response(data);
+                        });
+                    },
+                    minLength: 2,
+                    select: function(event, ui) {
+                        // Logging the selected item to console for debugging
+                        console.log("Selected:", ui.item.value);
+                    }
+                });
+            }
+        });
+        </script>
+</body>
+</html>

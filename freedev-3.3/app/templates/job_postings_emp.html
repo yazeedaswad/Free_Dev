@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+<html lang="en">
+    {% block head %}
+    {{ super() }}
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Job Posting</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="static/css/jobpostingsStyle.css">
+    {% endblock %}
+
+    {% block content %}
+    <body>
+        <div class="container">
+            <h1>Create Job Posting</h1>
+
+            <div class="button-container-signup">
+                <button type="button" class="btn btn-info" onclick="location.href='{{ url_for('view_followings') }}';">View Followings</button>
+            </div>
+
+            <div class="button-container-login">
+                <form action="{{ url_for('logout_user') }}" method="post">
+                    <button type="submit" class="btn btn-warning">Logout</button>
+                </form>
+            </div>
+
+            <div class="button-search">
+                <form action="{{ url_for('search') }}" method="get">
+                    <input type="text" class="button-searchbar" id="search-box" name="query" placeholder="Search..." autocomplete="off">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+
+            <div class="button-container">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Create Job</button>
+            </div>
+
+            <!-- Modal for Creating Job -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content signupform">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Job Posting</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/create-job-posting" method="POST" class="container">
+                                <div class="mb-3">
+                                    <label for="jobTitle" class="form-label label-name">Job Title</label>
+                                    <input type="text" class="form-control inputbars" id="jobTitle" name="jobTitle" placeholder="Enter job title">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="projectType" class="form-label label-email">Type of Project</label>
+                                    <input type="text" class="form-control inputbars" id="projectType" name="projectType" placeholder="Enter project type">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="skillsRequired" class="form-label label-password">Skills Required</label>
+                                    <input type="text" class="form-control inputbars" id="skillsRequired" name="skillsRequired" placeholder="Enter skills required">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deadline" class="form-label">Deadline</label>
+                                    <input type="date" class="form-control inputbars" id="deadline" name="deadline">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="salaryMin" class="form-label">Salary Range</label>
+                                    <input type="number" class="form-control mb-2 inputbars" id="salaryMin" name="salaryMin" placeholder="Minimum Salary">
+                                    <input type="number" class="form-control inputbars" id="salaryMax" name="salaryMax" placeholder="Maximum Salary">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control inputbars" id="description" name="description" rows="4" placeholder="Enter job description"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary button-submit">Save Job Posting</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employer's Job Postings Section -->
+            <div class="container">
+                <h2>Your Job Postings</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Project Type</th>
+                            <th>Skills Required</th>
+                            <th>Deadline</th>
+                            <th>Salary Range</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in job_postings %}
+                        <tr>
+                            <td>{{ job.title }}</td>
+                            <td>{{ job.project_type }}</td>
+                            <td>{{ job.skills_required }}</td>
+                            <td>{{ job.deadline }}</td>
+                            <td>{{ job.salary_min }} - {{ job.salary_max }}</td>
+                            <td>{{ job.description }}</td>
+                            <td>
+                                <button type="button" class="btn btn-warning" onclick="editJobPosting('{{ job.id }}')">Edit</button>
+                                <button type="button" class="btn btn-danger" onclick="deleteJobPosting('{{ job.id }}')">Delete</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            function editJobPosting(jobId) {
+                fetch(`/get-job-posting/${jobId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('editJobId').value = jobId;
+                        document.getElementById('editJobTitle').value = data.title;
+                        document.getElementById('editProjectType').value = data.project_type;
+                        document.getElementById('editSkillsRequired').value = data.skills_required;
+                        document.getElementById('editDeadline').value = data.deadline;
+                        document.getElementById('editSalaryMin').value = data.salary_min;
+                        document.getElementById('editSalaryMax').value = data.salary_max;
+                        document.getElementById('editDescription').value = data.description;
+
+                        var editModal = new bootstrap.Modal(document.getElementById('editJobModal'));
+                        editModal.show();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to fetch job posting details.');
+                    });
+            }
+
+            function deleteJobPosting(jobId) {
+                fetch(`/delete-job-posting/${jobId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to delete job posting');
+                    }
+                });
+            }
+        </script>
+
+        <!-- Bootstrap JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+        <script>
+            const myModal = document.getElementById('myModal');
+            const myInput = document.getElementById('myInput');
+
+            myModal.addEventListener('shown.bs.modal', () => {
+                myInput.focus();
+            });
+        </script>
+    </body>
+    {% endblock %}
+</html>

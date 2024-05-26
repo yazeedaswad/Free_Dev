@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<style>
+    body {
+        display: Arial Black, sans-serif;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        font-family: 'Arial Black', sans-serif;
+        background-color: #FFFAFA; /* Soft background color */
+    }
+
+    .btn-back {
+        margin: 20px;
+        padding: 10px 15px;
+        background-color: #7FBFB6; /* Bootstrap primary blue */
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+    }
+
+    .btn-back:hover {
+        background-color: #7FBFB6; /* A darker shade for hover effect */
+    }
+
+    h2 {
+        text-align: center;
+        color: #333; /* Dark grey color for text */
+        padding-top: 20px;
+    }
+
+    .list-group {
+        width: 80%;
+        margin: auto;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+
+    .list-group-item {
+        border: none;
+        padding: 12px 20px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .list-group-item:last-child {
+        border-bottom: none;
+    }
+
+    .list-group-item a {
+        color: #7FBFB6;
+        text-decoration: none;
+    }
+
+    .list-group-item a:hover {
+        color: #7FBFB6;
+    }
+
+    p {
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('job_postings') }}" class="btn-back">Back to Job Postings</a>
+<h2>Profiles I Follow</h2>
+{% if followed_users %}
+    <ul class="list-group">
+        {% for user in followed_users %}
+        <li class="list-group-item">
+            <a href="{{ url_for('public_profile', email=user.email) }}">{{ user.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You are not following anyone yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}My Followers{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        body {
+            display: Arial Black, sans-serif;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-family: American Typewriter, serif;
+         
+            background-color: #FFFAFA; /* Soft background color FFFAFA*/
+        }
+    
+        .btn-primary {
+        margin: 20px;
+        padding: 10px 15px;
+        background-color: #7FBFB6; /* Specific color for the button */
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        border: none; /* Remove border */
+        cursor: pointer; /* Add cursor pointer on hover */
+        transition: background-color 0.3s; /* Smooth hover effect */
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Darker shade for hover effect */
+    }
+    
+        h2 {
+            text-align: center;
+            color: #333; /* Dark grey color for text */
+            padding-top: 20px;
+        }
+    
+        .list-group {
+            width: 80%;
+            margin: auto;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+    
+        .list-group-item {
+            border: none;
+            padding: 12px 20px;
+            border-bottom: 1px solid #ccc;
+        }
+    
+        .list-group-item:last-child {
+            border-bottom: none;
+        }
+    
+        .list-group-item a {
+            color: #7FBFB6;
+            text-decoration: none;
+        }
+    
+        .list-group-item a:hover {
+            color: #7FBFB6;
+        }
+    
+        p {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('profile_page') }}" class="btn btn-primary profile-button">Back to Profile</a>
+
+<h2>My Followers</h2>
+
+{% if followers %}
+    <div class="list-group">
+        {% for follower in followers %}
+            <div class="list-group-item">
+                {{ follower.name }} <span class="text-muted">- {{ follower.email }}</span>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>You do not have any followers yet.</p>
+{% endif %}
+
+{% endblock %}
+
+

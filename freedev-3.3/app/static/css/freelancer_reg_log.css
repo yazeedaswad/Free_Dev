@@ -1,0 +1,147 @@
+body {
+    font-family:'Trebuchet MS',sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #FFFAFA; /* Updated background color */
+     
+    height: 100vh;
+}
+
+h2{
+    font-size: 35px;
+    font-family: arial black,sans-serif;
+    font-weight: 10;
+    color:  #7FBFB6;
+    position: absolute;
+    left: 450px;
+    top: 90px;
+}
+h1 {
+    color:#7FBFB6;
+    font-size: 50px;
+    font-family: arial black,sans-serif;
+    font-weight: 10;
+    position: absolute;
+    top: 30px; /* Position from the top */
+    left: 100px; /* Position from the left */;
+}
+p{
+    font-family: American Typewriter, serif;
+    font-size: 20px;
+    position: absolute;
+    top: 145px;
+    left: 600px;
+    color:  #111212;
+    
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    margin: 5px,0; /* Add margin above and below the input fields */
+}
+button {
+    background-color:  #7FBFB6;
+    color: #fff;
+    border: none;
+    padding: 10px 20px; /* Adjust padding as needed */
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #699f97;
+}
+.loginform{
+    position:absolute;
+    top: 200px;
+    left: 400px;
+    height: 300px;
+    width: 490px;
+    background-color: #7FBFB6;
+    border-radius: 2%;
+}
+.button-submit{
+    height: 34px;
+    width: 250px;
+    position: absolute;
+    border: none;
+    color: #FFFAFA;
+    background-color: #7FBFB6;
+    font-size: 25px;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-weight: 900;
+    top: 240px;
+    left: 80px;
+}
+label{
+    font-family: 'Trebuchet MS', sans-serif;
+    color: #FFFAFA;
+    font-size: 27px;
+    font-weight: 800;
+}
+.label-email{
+    position: absolute;
+    top: 70px;
+    left: -20px;
+}
+.label-password{
+    position: absolute;
+    top: 155px;
+    left: -20px;
+}
+.input-bars{
+    height: 23px;
+    width: 150px;
+    top: 170px;
+    display: block;
+}
+
+
+/* Updated CSS */
+.label-email {
+    position: absolute;
+    top: 70px;
+    left: 20px; /* Adjusted left position */
+}
+.input-bars[name="email-address"] {
+    position: absolute;
+    top: 70px;
+    left: 200px; /* Adjusted left position */
+}
+
+.label-password {
+    position: absolute;
+    top: 120px; /* Adjusted top position */
+    left: 20px; /* Adjusted left position */
+}
+.input-bars[name="password"] {
+    position: absolute;
+    top: 120px; /* Adjusted top position */
+    left: 200px; /* Adjusted left position */
+}
+
+.label-email {
+    position: absolute;
+    top: 70px;
+    left: 20px; /* Adjusted left position */
+    width: 80px; /* Adjusted width for better alignment */
+}
+.input-bars[name="email-address"] {
+    position: absolute;
+    top: 74px;
+    left: 50px; /* Adjusted left position */
+}
+
+.label-password {
+    position: absolute;
+    top: 120px; /* Adjusted top position */
+    left: 20px; /* Adjusted left position */
+    width: 100px; /* Adjusted width for better alignment */
+}
+.input-bars[name="password"] {
+    position: absolute;
+    top: 124px; /* Adjusted top position */
+    left: 50px; /* Adjusted left position */
+}
